@@ -4,33 +4,16 @@
 //esto es sintaxis excma script 6
 import express, { request } from 'express'
 
+// importamos el router para ser usado a nivel de toda la app
+import userRouter from './src/routes/userRouter.js'
+
 const app = express()
 
 // esto es para que el servidor pueda entender los datos
 // de la ruta que se envia desde el cliente
 // es un middleware para formato json
 app.use(express.json())
-
-const users = [
-    {
-      id: 1,
-      name: "Alison",
-      email: "alison@mail.com",
-      createdAt: "2023-01-01"
-    },
-    {
-      id: 2,
-      name: "Paola",
-      email: "paola@mail.com",
-      createdAt: "2023-01-01"
-    },
-    {
-      id: 3,
-      name: "Rafa",
-      email: "rafa@mail.com",
-      createdAt: "2023-01-01"
-    }
-  ]
+app.use(userRouter)
 
 const posts = [
   {
@@ -108,39 +91,6 @@ app.get('/', (request_, response) => {
             message: 'Bienvenidos a la API RESTful de la Generacion 23a'
         })
 })
-
-// index
-app.get('/users', (request_, response) => {
-    response
-        .status(200)
-        .send({
-            users
-        })
-})
-
-app.post('/users', (request, response) => {
-    // console.log(request.body)
-    if (Object.entries(request.body).length === 0) {
-      response.status(400).send({ error: 'Solicitud invalida' })
-    }
-    /*
-    // este código no usa la sintaxis de ES6
-    const { name, email } = request.body
-  
-    const newUser = {
-      id: users.length + 1,
-      name,
-      email,
-      createdAt: "2023-02-17"
-    }*/
-    const newUser = {
-      id: users.length + 1,
-      ...request.body,
-      createdAt: "2023-02-17"
-    }
-    users.push(newUser)
-    response.status(201).send(newUser)
-  })
 
   // consulta de un usuario
   app.get('/users/:id', (request, response) => {
